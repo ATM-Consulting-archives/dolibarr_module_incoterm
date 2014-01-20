@@ -49,8 +49,16 @@ class ActionsIncoterm
 				if($action == "create"){
 					
 					$sql = "SELECT fk_incoterms FROM ".MAIN_DB_PREFIX."societe WHERE rowid = ".$_REQUEST['socid'];
-					$resql = $db->query($sql);
 					
+					if(in_array('expeditioncard',explode(':',$parameters['context']))){
+						$sql = "SELECT s.fk_incoterms 
+								FROM ".MAIN_DB_PREFIX."societe as s
+									LEFT JOIN ".MAIN_DB_PREFIX."commande as c ON (c.fk_soc = s.rowid)
+								WHERE c.rowid = ".$_REQUEST['origin_id'];
+					}
+					
+					$resql = $db->query($sql);
+										
 					if($resql){
 						$res = $db->fetch_object($resql);
 						$id_incoterm = $res->fk_incoterms;
