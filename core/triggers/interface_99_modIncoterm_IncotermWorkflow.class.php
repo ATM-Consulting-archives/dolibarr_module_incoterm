@@ -116,8 +116,6 @@ class InterfaceIncotermWorkflow
 		if($action == "PROPAL_CREATE" || $action =="ORDER_CREATE" || $action =="BILL_CREATE" || $action =="SHIPPING_CREATE" || $action=="COMPANY_CREATE"){
 			if(isset($_REQUEST['incoterms']) && !empty($_REQUEST['incoterms'])){
 				
-				echo $_REQUEST['incoterms'];exit;
-				
 				$db->query('UPDATE '.MAIN_DB_PREFIX.$object->table_element.' SET fk_incoterms = '.$_REQUEST['incoterms'].' WHERE rowid = '.$object->id);
 			}	
 		}
