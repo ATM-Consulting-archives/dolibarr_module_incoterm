@@ -261,7 +261,7 @@ class modIncoterm extends DolibarrModules
 
 		$result=$this->load_tables();
 		
-		$url ='http://'.$_SERVER['SERVER_NAME']. DOL_URL_ROOT_ALT."/incoterm/script/create-maj-base.php";
+		$url = dol_buildpath('/declinaison/script/create-maj-base.php', 1);
 		file_get_contents($url);
 		//exit($url);
 

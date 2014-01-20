@@ -23,8 +23,8 @@
 	$o=new TIncotermsExpedition;
 	$o->init_db_by_vars($ATMdb);
 	
-	$o=new TProductUnit;
-	$o->init_db_by_vars($ATMdb);
+	/*$o=new TProductUnit;
+	$o->init_db_by_vars($ATMdb);*/
 	
 	$o=new TIncotermsSociete;
 	$o->init_db_by_vars($ATMdb);
