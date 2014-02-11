@@ -46,7 +46,7 @@ class ActionsIncoterm
 						WHERE te.rowid = '.$object->id);
 				$res = $db->fetch_object($resl);
 				
-				if($res){
+				if($res && strpos($object->note_public, 'Incoterm') === FALSE){
 					$object->note_public .= "\nIncoterm : ".$res->code;
 				}
 				
