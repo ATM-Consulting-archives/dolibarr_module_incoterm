@@ -67,7 +67,7 @@ class ActionsIncoterm
 					$newlang=(GETPOST('lang_id') ? GETPOST('lang_id') : $object->client->default_lang);
 					$outputlangs->setDefaultLang($newlang);
 				}
-				$ret=$object->fetch($id);    // Reload to get new records
+				//$ret=$object->fetch($id);    // Reload to get new records
 				
 				/*echo '<pre>';
 				print_r($object);
