@@ -17,7 +17,7 @@ class ActionsIncoterm
 		
         if($action == "validmodincoterm"){
 			if(isset($_REQUEST['incoterms']) && !empty($_REQUEST['incoterms'])){
-				$db->query('UPDATE '.MAIN_DB_PREFIX.$object->table_element.' SET fk_incoterms = '.$_REQUEST['incoterms'].' WHERE rowid = '.$object->id);
+				$db->query('UPDATE '.MAIN_DB_PREFIX.$object->table_element.' SET fk_incoterms = '.$_REQUEST['incoterms'].', location_incoterms = \''.$_REQUEST['location_incoterms'].'\' WHERE rowid = '.$object->id);
 			}
 		}
 		
@@ -40,14 +40,14 @@ class ActionsIncoterm
 				// 1 - Dans le document
 				
 				//Ajout des Incoterms dans la note public
-				$resl = $db->query('SELECT ci.code
+				$resl = $db->query('SELECT ci.code, te.location_incoterms
 						FROM '.MAIN_DB_PREFIX.'c_incoterms as ci
 							LEFT JOIN '.MAIN_DB_PREFIX.$object->table_element.' as te ON (te.fk_incoterms = ci.rowid)
 						WHERE te.rowid = '.$object->id);
 				$res = $db->fetch_object($resl);
 				
 				if($res && strpos($object->note_public, 'Incoterm') === FALSE){
-					$object->note_public .= "\nIncoterm : ".$res->code;
+					$object->note_public .= "\nIncoterm : ".$res->code.' - '.$res->location_incoterms;
 				}
 				
 				// ***********************************************
@@ -133,7 +133,7 @@ class ActionsIncoterm
 			 */	
 				if($action == "create"){
 					
-					$sql = "SELECT fk_incoterms FROM ".MAIN_DB_PREFIX."societe WHERE rowid = ".$_REQUEST['socid'];
+					$sql = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX."societe WHERE rowid = ".$_REQUEST['socid'];
 					
 					if(in_array('expeditioncard',explode(':',$parameters['context']))){
 						$sql = "SELECT s.fk_incoterms 
@@ -147,6 +147,7 @@ class ActionsIncoterm
 					if($resql){
 						$res = $db->fetch_object($resql);
 						$id_incoterm = $res->fk_incoterms;
+						$location_incoterms = $res->location_incoterms;
 					}
 					else 
 						$id_incoterm = "";
@@ -168,16 +169,19 @@ class ActionsIncoterm
 						}
 					}
 					
-					print '</select></td></tr>';
+					print '</select>';
+					print '<input type="text" name="location_incoterms" value="'.$location_incoterms.'" />';
+					print '</td></tr>';
 				}
 				elseif($action == "modincoterm"){
 					
-					$sql = "SELECT fk_incoterms FROM ".MAIN_DB_PREFIX.$object->table_element." WHERE rowid = ".$object->id;
+					$sql = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX.$object->table_element." WHERE rowid = ".$object->id;
 					$resql = $db->query($sql);
 					
 					if($resql){
 						$res = $db->fetch_object($resql);
 						$id_incoterm = $res->fk_incoterms;
+						$location_incoterms = $res->location_incoterms;
 					}
 					else 
 						$id_incoterm = "";
@@ -199,13 +203,17 @@ class ActionsIncoterm
 							print '<option value="'.$res->rowid.'">'.$res->code.'</option>';
 					}
 					
-					print '</select><input class="button" type="submit" value="Modifier"></form></td></tr>';
+					print '</select>';
+					print '<input type="text" name="location_incoterms" value="'.$location_incoterms.'" />';
+					print '<input class="button" type="submit" value="Modifier"></form></td></tr>';
 				}
 				else{
-					$sql = "SELECT fk_incoterms FROM ".MAIN_DB_PREFIX.$object->table_element." WHERE rowid = ".$object->id;
+					$sql = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX.$object->table_element." WHERE rowid = ".$object->id;
+					
 					$resql = $db->query($sql);
 					if($resql){
 						$res = $db->fetch_object($resql);
+						$location_incoterms = $res->location_incoterms;
 						
 						$sql = "SELECT code FROM ".MAIN_DB_PREFIX."c_incoterms WHERE rowid = ".$res->fk_incoterms;
 						$resql = $db->query($sql);
@@ -221,7 +229,7 @@ class ActionsIncoterm
 					
 					if($resql){
 						$res = $db->fetch_object($resql);
-						print $res->code;
+						print $res->code.' - '.$location_incoterms;
 					}
 					
 					print '</select></td></tr>';
