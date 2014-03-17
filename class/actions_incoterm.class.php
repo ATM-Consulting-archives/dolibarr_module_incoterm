@@ -16,6 +16,7 @@ class ActionsIncoterm
 		echo '</pre>';*/
 		
         if($action == "validmodincoterm"){
+        	//print_r($object);exit;
 			if(isset($_REQUEST['incoterms']) && !empty($_REQUEST['incoterms'])){
 				$db->query('UPDATE '.MAIN_DB_PREFIX.$object->table_element.' SET fk_incoterms = '.$_REQUEST['incoterms'].', location_incoterms = \''.$_REQUEST['location_incoterms'].'\' WHERE rowid = '.$object->id);
 			}
@@ -45,6 +46,7 @@ class ActionsIncoterm
 				|| in_array('ordercard',explode(':',$parameters['context'])) 
 				|| in_array('invoicecard',explode(':',$parameters['context'])) 
 				|| in_array('expeditioncard',explode(':',$parameters['context']))
+				|| in_array('receptioncard',explode(':',$parameters['context']))
 				|| in_array('thirdpartycard',explode(':',$parameters['context']))){
 				
 			/*
@@ -127,6 +129,7 @@ class ActionsIncoterm
 					print '<input class="button" type="submit" value="Modifier"></form></td></tr>';
 				}
 				else{
+					//pre($object, true);exit;
 					$sql = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX.$object->table_element." WHERE rowid = ".$object->id;
 					
 					$resql = $db->query($sql);

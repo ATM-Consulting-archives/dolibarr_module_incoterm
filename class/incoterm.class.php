@@ -6,7 +6,8 @@ class TIncoterm{
 		global $langs, $db, $conf, $user;
 		
 		if (in_array('ordercard',explode(':',$parameters['context'])) || in_array('propalcard',explode(':',$parameters['context']))
-			|| in_array('expeditioncard',explode(':',$parameters['context'])) || in_array('invoicecard',explode(':',$parameters['context']))){
+			|| in_array('expeditioncard',explode(':',$parameters['context'])) || in_array('invoicecard',explode(':',$parameters['context']))
+			|| in_array('receptioncard',explode(':',$parameters['context']))){
 			
         	if ($action == 'builddoc')
 			{
@@ -132,6 +133,18 @@ class TIncotermsExpedition extends TObjetStd {
 	}
 }
 
+class TIncotermsLivraison extends TObjetStd {
+	function __construct() { /* declaration */
+		global $langs;
+		
+		parent::set_table(MAIN_DB_PREFIX.'livraison');
+		parent::add_champs('fk_incoterms','type=entier;');
+		parent::add_champs('location_incoterms','type=chaine;');
+		
+		parent::_init_vars();
+		parent::start();
+	}
+}
 
 class TIncotermsSociete extends TObjetStd {
 	function __construct() { /* declaration */

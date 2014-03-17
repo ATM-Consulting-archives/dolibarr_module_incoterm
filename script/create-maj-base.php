@@ -23,6 +23,9 @@
 	$o=new TIncotermsExpedition;
 	$o->init_db_by_vars($ATMdb);
 	
+	$o=new TIncotermsLivraison;
+	$o->init_db_by_vars($ATMdb);
+	
 	/*$o=new TProductUnit;
 	$o->init_db_by_vars($ATMdb);*/
 	
