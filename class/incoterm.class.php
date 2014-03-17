@@ -11,7 +11,7 @@ class TIncoterm{
 			
         	if ($action == 'builddoc')
 			{
-		
+				
 				//Ajout des Incoterms dans la note public
 				$resl = $db->query('SELECT ci.code, te.location_incoterms
 						FROM '.MAIN_DB_PREFIX.'c_incoterms as ci
@@ -56,6 +56,9 @@ class TIncoterm{
 							break;
 						case 'shipping':
 							$result= expedition_pdf_create($db, $object, $object->modelpdf, $outputlangs);
+							break;
+						case 'delivery':
+							$result=delivery_order_pdf_create($db, $object, $object->modelpdf, $outputlangs);
 							break;
 						
 						default:
