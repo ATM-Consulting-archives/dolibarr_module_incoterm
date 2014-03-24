@@ -128,7 +128,7 @@ class ActionsIncoterm
 					print '<input type="text" name="location_incoterms" value="'.$location_incoterms.'" />';
 					print '<input class="button" type="submit" value="Modifier"></form></td></tr>';
 				}
-				else{
+				elseif($action != "edit"){
 					//pre($object, true);exit;
 					$sql = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX.$object->table_element." WHERE rowid = ".$object->id;
 					
