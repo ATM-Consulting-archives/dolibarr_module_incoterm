@@ -54,6 +54,8 @@ class ActionsIncoterm
 			 */	
 				if($action == "create"){
 					
+					//pre($_REQUEST,true);
+					
 					$sql = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX."societe WHERE rowid = ".$_REQUEST['socid'];
 					
 					if(in_array('expeditioncard',explode(':',$parameters['context']))){
@@ -61,6 +63,9 @@ class ActionsIncoterm
 								FROM ".MAIN_DB_PREFIX."societe as s
 									LEFT JOIN ".MAIN_DB_PREFIX."commande as c ON (c.fk_soc = s.rowid)
 								WHERE c.rowid = ".$_REQUEST['origin_id'];
+					}
+					if(isset($_REQUEST['origin']) && isset($_REQUEST['originid'])){
+						$sql = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX.$_REQUEST['origin']." WHERE rowid = ".$_REQUEST['originid'];
 					}
 					
 					$resql = $db->query($sql);
@@ -75,12 +80,12 @@ class ActionsIncoterm
 					
 					$sql = "SELECT rowid, code FROM ".MAIN_DB_PREFIX."c_incoterms ORDER BY rowid ASC";
 					$resql = $db->query($sql);
-					
+
 					print '<tr><td>Incoterms</td>';
 					print '<td colspan="2">';
 					print '<select name="incoterms" class="flat" id="incoterms_id">';
 					print '<option value="">&nbsp;</option>';
-					
+
 					while ($res = $db->fetch_object($resql)) {
 						if($res->rowid == $id_incoterm){
 							print '<option selected="selected" value="'.$res->rowid.'">'.$res->code.'</option>';
@@ -98,7 +103,7 @@ class ActionsIncoterm
 					
 					$sql = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX.$object->table_element." WHERE rowid = ".$object->id;
 					$resql = $db->query($sql);
-					
+
 					if($resql){
 						$res = $db->fetch_object($resql);
 						$id_incoterm = $res->fk_incoterms;
@@ -106,7 +111,7 @@ class ActionsIncoterm
 					}
 					else 
 						$id_incoterm = "";
-					
+
 					$sql = "SELECT rowid, code FROM ".MAIN_DB_PREFIX."c_incoterms ORDER BY rowid ASC";
 					$resql = $db->query($sql);
 					$id_field = (in_array('thirdpartycard',explode(':',$parameters['context'])))? "socid" : "id";
@@ -116,7 +121,7 @@ class ActionsIncoterm
 					print '<input type="hidden" name="action" value="validmodincoterm" />';
 					print '<select name="incoterms" class="flat" id="incoterms_id">';
 					print '<option value="">&nbsp;</option>';
-					
+
 					while ($res = $db->fetch_object($resql)) {
 						if($res->rowid == $id_incoterm)
 							print '<option selected="selected" value="'.$res->rowid.'">'.$res->code.'</option>';
@@ -131,12 +136,12 @@ class ActionsIncoterm
 				elseif($action != "edit"){
 					//pre($object, true);exit;
 					$sql = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX.$object->table_element." WHERE rowid = ".$object->id;
-					
+
 					$resql = $db->query($sql);
 					if($resql){
 						$res = $db->fetch_object($resql);
 						$location_incoterms = $res->location_incoterms;
-						
+
 						$sql = "SELECT code FROM ".MAIN_DB_PREFIX."c_incoterms WHERE rowid = ".$res->fk_incoterms;
 						$resql = $db->query($sql);
 					}
@@ -155,8 +160,7 @@ class ActionsIncoterm
 					}
 					
 					print '</select></td></tr>';
-					
-				
+
 				}
 			
 			
