@@ -22,10 +22,12 @@ class ActionsIncoterm
 			}
 		}
 		
-		dol_include_once('/incoterm/config.php');
-		dol_include_once('/custom/incoterm/class/incoterm.class.php');
-
-		TIncoterm::doActionsIncoterm($parameters, $object, $action, $hookmanager);
+		if ($action == 'builddoc'){
+			dol_include_once('/incoterm/config.php');
+			dol_include_once('/custom/incoterm/class/incoterm.class.php');
+	
+			TIncoterm::doActionsIncoterm($parameters, $object, $action, $hookmanager);
+		}
  
         return 0;
     }
