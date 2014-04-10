@@ -107,8 +107,6 @@ class InterfaceIncotermWorkflow
 	function run_trigger($action,&$object,&$user,$langs,&$conf)
 	{
 		global $db, $user, $conf;
-		if(!defined('INC_FROM_DOLIBARR'))define('INC_FROM_DOLIBARR',true);
-		dol_include_once('/incoterm/config.php');
 		
 		/*
 		 * TRAITEMENT DE CREATION PROPAL, COMMANDE, FACTURE, EXPEDITION
