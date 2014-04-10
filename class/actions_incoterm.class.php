@@ -21,19 +21,21 @@ class ActionsIncoterm
 				$db->query('UPDATE '.MAIN_DB_PREFIX.$object->table_element.' SET fk_incoterms = '.$_REQUEST['incoterms'].', location_incoterms = \''.$_REQUEST['location_incoterms'].'\' WHERE rowid = '.$object->id);
 			}
 		}
-		
-		dol_include_once('/incoterm/config.php');
-		dol_include_once('/incoterm/class/incoterm.class.php');
+		elseif($action == "builddoc"){
+			
+			if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
+			require_once('../custom/incoterm/config.php');
+			require_once('../custom/incoterm/class/incoterm.class.php');
 
-		TIncoterm::doActionsIncoterm($parameters, $object, $action, $hookmanager);
- 
+			TIncoterm::doActionsIncoterm($parameters, $object, $action, $hookmanager);
+		}
+	
         return 0;
     }
     
     function formObjectOptions ($parameters, &$object, &$action, $hookmanager) 
     {
     	global $db, $user, $conf;
-		dol_include_once('/incoterm/config.php');
 		/*echo '<pre>';
 		print_r($object);
 		echo '</pre>';exit;*/
