@@ -19,9 +19,14 @@ class TIncoterm{
 						WHERE te.rowid = '.$object->id);
 				$res = $db->fetch_object($resl);
 				
+				$txt = '';
 				if($res && strpos($object->note_public, 'Incoterm') === FALSE){
-					$object->note_public .= "\nIncoterm : ".$res->code.' - '.$res->location_incoterms;
+					$txt .= "\nIncoterm : ".$res->code.' - '.$res->location_incoterms;
 				}
+				
+				// Gestion des sauts de lignes si la note était en HTML de base
+				if(dol_textishtml($object->note_public)) $object->note_public .= dol_nl2br($txt);
+				else $object->note_public .= $txt;
 				
 				//Si le module est actif sans module spécifique client alors on reproduit la génération standard dolibarr sinon on retourne l'objet modifié
 				if(!$conf->global->USE_SPECIFIC_CLIENT){
