@@ -24,8 +24,8 @@ class ActionsIncoterm
 		elseif($action == "builddoc"){
 			
 			if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
-			require_once('../custom/incoterm/config.php');
-			require_once('../custom/incoterm/class/incoterm.class.php');
+			dol_include_once('incoterm/config.php');
+			dol_include_once('/incoterm/class/incoterm.class.php');
 
 			TIncoterm::doActionsIncoterm($parameters, $object, $action, $hookmanager);
 		}
