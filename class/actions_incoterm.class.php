@@ -45,8 +45,9 @@ class ActionsIncoterm
 		 * INCOTERMS 
 		 */	
 		if(in_array('propalcard',explode(':',$parameters['context'])) 
-				|| in_array('ordercard',explode(':',$parameters['context'])) 
-				|| in_array('invoicecard',explode(':',$parameters['context'])) 
+				|| in_array('ordercard',explode(':',$parameters['context']))
+				|| in_array('ordersuppliercard',explode(':',$parameters['context']))
+				|| in_array('invoicecard',explode(':',$parameters['context']))
 				|| in_array('expeditioncard',explode(':',$parameters['context']))
 				|| in_array('receptioncard',explode(':',$parameters['context']))
 				|| in_array('thirdpartycard',explode(':',$parameters['context']))){

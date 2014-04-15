@@ -31,3 +31,6 @@
 	
 	$o=new TIncotermsSociete;
 	$o->init_db_by_vars($ATMdb);
+	
+	$o=new TIncotermsCommandeFournisseur;
+	$o->init_db_by_vars($ATMdb);

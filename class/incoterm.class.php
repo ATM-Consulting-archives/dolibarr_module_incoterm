@@ -7,7 +7,7 @@ class TIncoterm{
 		
 		if (in_array('ordercard',explode(':',$parameters['context'])) || in_array('propalcard',explode(':',$parameters['context']))
 			|| in_array('expeditioncard',explode(':',$parameters['context'])) || in_array('invoicecard',explode(':',$parameters['context']))
-			|| in_array('receptioncard',explode(':',$parameters['context']))){
+			|| in_array('receptioncard',explode(':',$parameters['context'])) || in_array('ordersuppliercard',explode(':',$parameters['context']))){
 			
         	if ($action == 'builddoc')
 			{
@@ -64,6 +64,9 @@ class TIncoterm{
 							break;
 						case 'delivery':
 							$result=delivery_order_pdf_create($db, $object, $object->modelpdf, $outputlangs);
+							break;
+						case 'order_supplier':
+							$result=supplier_order_pdf_create($db, $object, $object->modelpdf, $outputlangs);
 							break;
 						
 						default:
@@ -159,6 +162,19 @@ class TIncotermsSociete extends TObjetStd {
 		global $langs;
 		
 		parent::set_table(MAIN_DB_PREFIX.'societe');
+		parent::add_champs('fk_incoterms','type=entier;');
+		parent::add_champs('location_incoterms','type=chaine;');
+		
+		parent::_init_vars();
+		parent::start();
+	}
+}
+
+class TIncotermsCommandeFournisseur extends TObjetStd {
+	function __construct() { /* declaration */
+		global $langs;
+		
+		parent::set_table(MAIN_DB_PREFIX.'commande_fournisseur');
 		parent::add_champs('fk_incoterms','type=entier;');
 		parent::add_champs('location_incoterms','type=chaine;');
 		
