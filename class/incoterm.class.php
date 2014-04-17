@@ -21,7 +21,8 @@ class TIncoterm{
 				
 				$txt = '';
 				if($res && strpos($object->note_public, 'Incoterm') === FALSE){
-					$txt .= "\nIncoterm : ".$res->code.' - '.$res->location_incoterms;
+					$txt .= "\nIncoterm : ".$res->code;
+					if(!empty($res->location_incoterms)) $txt .= ' - '.$res->location_incoterms;
 				}
 				
 				// Gestion des sauts de lignes si la note était en HTML de base
