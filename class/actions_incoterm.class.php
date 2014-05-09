@@ -57,8 +57,6 @@ class ActionsIncoterm
 			 */	
 				if($action == "create"){
 					
-					//pre($_REQUEST,true);
-					
 					$sql = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX."societe WHERE rowid = ".$_REQUEST['socid'];
 					
 					if(in_array('expeditioncard',explode(':',$parameters['context']))){
@@ -67,10 +65,12 @@ class ActionsIncoterm
 									LEFT JOIN ".MAIN_DB_PREFIX."commande as c ON (c.fk_soc = s.rowid)
 								WHERE c.rowid = ".$_REQUEST['origin_id'];
 					}
-					if(isset($_REQUEST['origin']) && isset($_REQUEST['originid'])){
-						$sql = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX.$_REQUEST['origin']." WHERE rowid = ".$_REQUEST['originid'];
+					if(isset($_REQUEST['origin']) && (isset($_REQUEST['originid']) || isset($_REQUEST['origin_id'])) ){
+						
+						$originid = ($_REQUEST['originid']) ? $_REQUEST['originid'] : $_REQUEST['origin_id'] ;
+						$sql = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX.$_REQUEST['origin']." WHERE rowid = ".$originid;
 					}
-					
+					//echo $sql;exit;
 					$resql = $db->query($sql);
 										
 					if($resql){
@@ -137,8 +137,48 @@ class ActionsIncoterm
 					print '<input class="button" type="submit" value="Modifier"></form></td></tr>';
 				}
 				elseif($action != "edit"){
-					//pre($object, true);exit;
+					
+					/*
+					 * Cette partie est spécifique aux livraisons
+					 * La livraison actuelle provient d'une expédition.
+					 * Le traitement suivant permet de peupler les incoterms de l'expédition sur la livraison actuelle.
+					 * Pour ce faire, on teste si les champs fk_incoterms et location_incoterms.
+					 * S'il sont nuls, c'est qu'ils n'ont pas encore été renseignés 
+					 * et qu'on peut donc les rentrer automatiquement avec les incoterms de l'expédition
+					 */
+					if(in_array('receptioncard',explode(':',$parameters['context'])) && empty($_REQUEST['incoterms']) && empty($_REQUEST['location_incoterms'])) {
+						
+						$query = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX."livraison WHERE rowid = ".$_REQUEST['id'];
+						$result = $db->query($query);
+						$res = $db->fetch_object($result);
+						
+						/*
+						 * On ne peuple les incoterms de l'expédition que si les 2 champs (fk_incoterms et location_incoterms) sont nuls
+						 * Autrement dit, si on provient d'une expédition sans n'avoir jamais modifié les incoterms de la livraison.
+						 */
+						
+						if(!$res->fk_incoterms) {
+													
+							$query = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX."expedition WHERE rowid = ".$object->origin_id;
+							$result = $db->query($query);
+							$res = $db->fetch_object($result);
+							
+							$query = "UPDATE ".MAIN_DB_PREFIX."livraison";
+							$query.= " SET fk_incoterms = ".$res->fk_incoterms;
+							$query.= ", location_incoterms = '".$res->location_incoterms;
+							$query.= "' WHERE rowid = ".$_REQUEST['id'];
+							$db->query($query);
+							
+						}
+						
+					}					
+					
 					$sql = "SELECT fk_incoterms, location_incoterms FROM ".MAIN_DB_PREFIX.$object->table_element." WHERE rowid = ".$object->id;
+
+					/*echo "<pre>";
+					print_r($object);
+					echo "</pre>";
+					exit;*/
 
 					$resql = $db->query($sql);
 					if($resql){
@@ -161,7 +201,7 @@ class ActionsIncoterm
 						$res = $db->fetch_object($resql);
 						print $res->code.' - '.$location_incoterms;
 					}
-					
+
 					print '</select></td></tr>';
 
 				}

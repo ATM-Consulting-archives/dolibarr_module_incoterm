@@ -17,7 +17,8 @@ class TIncoterm{
 						FROM '.MAIN_DB_PREFIX.'c_incoterms as ci
 							LEFT JOIN '.MAIN_DB_PREFIX.$object->table_element.' as te ON (te.fk_incoterms = ci.rowid)
 						WHERE te.rowid = '.$object->id);
-				$res = $db->fetch_object($resl);
+				if($resl) 
+					$res = $db->fetch_object($resl);
 				
 				$txt = '';
 				if($res && strpos($object->note_public, 'Incoterm') === FALSE){
