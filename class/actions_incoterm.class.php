@@ -23,11 +23,11 @@ class ActionsIncoterm
 		}
 		elseif($action === "builddoc"){
 			
-			if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
+			/*if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
 			dol_include_once('incoterm/config.php');
 			dol_include_once('/incoterm/class/incoterm.class.php');
 
-			TIncoterm::doActionsIncoterm($parameters, $object, $action, $hookmanager);
+			TIncoterm::doActionsIncoterm($parameters, $object, $action, $hookmanager);*/
 		}
 	
         return 0;

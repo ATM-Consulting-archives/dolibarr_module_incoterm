@@ -117,6 +117,35 @@ class InterfaceIncotermWorkflow
 				$db->query('UPDATE '.MAIN_DB_PREFIX.$object->table_element.' SET fk_incoterms = '.$_REQUEST['incoterms'].', location_incoterms = \''.$_REQUEST['location_incoterms'].'\' WHERE rowid = '.$object->id);
 			}	
 		}
+		
+		if($action == "BEFORE_PROPAL_BUILDDOC" || $action == "BEFORE_ORDER_BUILDDOC"  || $action == "BEFORE_BILL_BUILDDOC" || $action == "BEFORE_ORDER_SUPPLIER_BUILDDOC" || $action == "BEFORE_BILL_SUPPLIER_BUILDDOC"){
+				
+			
+			//Ajout des Incoterms dans la note public
+			$resl = $db->query('SELECT ci.code, te.location_incoterms
+					FROM '.MAIN_DB_PREFIX.'c_incoterms as ci
+						LEFT JOIN '.MAIN_DB_PREFIX.$object->table_element.' as te ON (te.fk_incoterms = ci.rowid)
+					WHERE te.rowid = '.$object->id);
+			if($resl) 
+				$res = $db->fetch_object($resl);
+			
+			$txt = '';
+			if($res && strpos($object->note_public, 'Incoterm') === FALSE){
+				$txt .= "\nIncoterm : ".$res->code;
+				if(!empty($res->location_incoterms)) $txt .= ' - '.$res->location_incoterms;
+			}
+			
+			// Gestion des sauts de lignes si la note était en HTML de base
+			if(dol_textishtml($object->note_public)) $object->note_public .= dol_nl2br($txt);
+			else $object->note_public .= $txt;
+			
+		}	
+		
+		if($action == "PROPAL_BUILDDOC" || $action == "ORDER_BUILDDOC"  || $action == "BILL_BUILDDOC" || $action == "ORDER_SUPPLIER_BUILDDOC" || $action == "BILL_SUPPLIER_BUILDDOC") {
+			
+			$object->fetch($object->id);
+
+		}
 				
 		return 1;
 	}
