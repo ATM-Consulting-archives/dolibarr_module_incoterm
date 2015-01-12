@@ -20,6 +20,9 @@ class ActionsIncoterm
 			if(isset($_REQUEST['incoterms']) && !empty($_REQUEST['incoterms'])){
 				$db->query('UPDATE '.MAIN_DB_PREFIX.$object->table_element.' SET fk_incoterms = '.$_REQUEST['incoterms'].', location_incoterms = \''.$_REQUEST['location_incoterms'].'\' WHERE rowid = '.$object->id);
 			}
+			else{
+				$db->query('UPDATE '.MAIN_DB_PREFIX.$object->table_element.' SET fk_incoterms = 0, location_incoterms = \'\' WHERE rowid = '.$object->id);
+			}
 		}
 		elseif($action === "builddoc"){
 			
